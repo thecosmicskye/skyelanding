@@ -146,6 +146,7 @@
       .orb {
         --accent-1: var(--accent-1);
         --accent-2: var(--accent-2);
+        --p: 1;       /* proximity scale factor */
         position: relative;
         width: 84px; height: 84px;
         border-radius: 9999px;
@@ -158,8 +159,9 @@
         backdrop-filter: blur(8px) saturate(140%);
         -webkit-backdrop-filter: blur(8px) saturate(140%);
         overflow: hidden;
-        transform: translateZ(0);
-        transition: transform 260ms ease, box-shadow 260ms ease;
+        transform: translateZ(0) scale(var(--p));
+        transition: transform 160ms ease, box-shadow 200ms ease;
+        will-change: transform, box-shadow;
       }
       .orb::before {
         content: "";
@@ -182,7 +184,8 @@
         pointer-events: none;
       }
       .orb:hover {
-        transform: translateY(-3px) scale(1.04);
+        /* Keep size exactly at proximity scale (no extra growth) and no rise */
+        transform: scale(var(--p));
         box-shadow: 0 10px 50px rgba(0,0,0,0.45), 0 0 28px rgba(138,92,255,0.45), 0 0 34px rgba(0,255,208,0.24);
       }
       .orb svg { width: 28px; height: 28px; display: block; fill: #ffffff; }
@@ -354,14 +357,57 @@
           ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
           ctx.fill();
         }
-        requestAnimationFrame(draw);
+      requestAnimationFrame(draw);
+    }
+
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas);
+    resize();
+    requestAnimationFrame(draw);
+
+    // Proximity scaling for orbs: grow more as you approach the edge, cap inside
+    (function enableProximityScaling() {
+      const orbs = Array.from(document.querySelectorAll('.orb'));
+      if (!orbs.length) return;
+
+      let px = -1e6, py = -1e6, active = false;
+
+      function updateAll(clientX, clientY) {
+        px = clientX; py = clientY; active = true;
+        for (const el of orbs) {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const r = rect.width / 2;
+          const dx = clientX - cx;
+          const dy = clientY - cy;
+          const dist = Math.hypot(dx, dy);
+          let scale = 1;
+          if (dist > r) {
+            // Outside the orb: grow based on distance to the edge
+            const dEdge = dist - r; // distance to edge
+            const influence = Math.max(rect.width * 1.2, 140);
+            let t = Math.max(0, 1 - dEdge / influence); // 0..1 as you approach the edge
+            t = t * t; // ease
+            scale = 1 + t * 0.20; // peak at the edge
+          } else {
+            // Inside: hold at edge size (no further growth or shrink)
+            scale = 1 + 0.20;
+          }
+          el.style.setProperty('--p', scale.toFixed(3));
+        }
       }
 
-      const ro = new ResizeObserver(resize);
-      ro.observe(canvas);
-      resize();
-      requestAnimationFrame(draw);
-    </script>
+      window.addEventListener('pointermove', (e) => updateAll(e.clientX, e.clientY), { passive: true });
+      window.addEventListener('pointerleave', () => {
+        active = false;
+        for (const el of orbs) {
+          el.style.setProperty('--p', '1');
+        }
+      });
+      window.addEventListener('resize', () => { if (active) updateAll(px, py); });
+    })();
+  </script>
 
     <!-- Structured data for SEO -->
     <script type="application/ld+json">
