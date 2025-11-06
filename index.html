@@ -290,12 +290,10 @@
           x: rand(0, w),
           y: rand(0, h),
           r: Math.pow(Math.random(), 1.8) * 1.4 + 0.2,
-          a: rand(0, 2 * Math.PI),
-          // Return twinkle speed closer to the earlier feel (faster than the slowed version)
-          sp: rand(0.25, 0.7), // radians per second (~9–25s per cycle)
-          // Add a pause after each full sine cycle; randomized per star
-          pause: rand(1.2, 3.6), // seconds of idle/dim state between cycles
-          seed: rand(0, 10)      // phase offset for gating schedule (seconds)
+          intensity: rand(0.4, 1.0),
+          currentSpeed: rand(0.8, 3.0), // reasonable speed range
+          phaseStart: 0, // when current cycle started
+          timeStart: 0 // time when current cycle started
         }));
       }
 
@@ -303,22 +301,30 @@
         const t = nowMs / 1000; // seconds
         ctx.clearRect(0, 0, w, h);
         for (const s of stars) {
-          // Determine whether this star is in its active twinkle cycle or paused
-          const cycle = (2 * Math.PI) / s.sp; // duration of one full sine cycle (seconds)
-          const window = cycle + s.pause;     // active + pause
-          const pos = (t + s.seed) % window;  // position within star's window
-          let twinkle;
-          if (pos <= cycle) {
-            // Active sine wave
-            twinkle = 0.55 + Math.sin(s.a + t * s.sp) * 0.45;
-          } else {
-            // Paused/dim between cycles
-            twinkle = 0.3; // keep faintly visible
+          // Calculate current phase based on time elapsed since cycle start
+          const elapsed = t - s.timeStart;
+          const currentPhase = s.phaseStart + elapsed * s.currentSpeed;
+          
+          // Check if we completed a full cycle (0 to π for abs(sin))
+          if (currentPhase >= s.phaseStart + Math.PI) {
+            // Start new cycle
+            s.phaseStart = 0; // reset to start of sine wave
+            s.timeStart = t; // reset timer
+            s.currentSpeed = rand(0.8, 3.0); // new random speed
           }
-          const radius = s.r * (0.7 + twinkle * 0.3);
+          
+          // Twinkle effect - recalculate with reset phase
+          const phase = s.phaseStart + (t - s.timeStart) * s.currentSpeed;
+          const twinkle = 0.2 + 0.8 * Math.abs(Math.sin(phase));
+          const brightness = s.intensity * twinkle;
+          const radius = s.r * (0.6 + brightness * 0.8);
+          const opacity = 0.1 + brightness * 0.9;
+          
           const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, radius * 3);
-          grad.addColorStop(0, 'rgba(255,255,255,' + (0.95 * twinkle) + ')');
+          grad.addColorStop(0, `rgba(255,255,255,${opacity})`);
+          grad.addColorStop(0.5, `rgba(207,232,255,${opacity * 0.6})`);
           grad.addColorStop(1, 'rgba(255,255,255,0)');
+          
           ctx.fillStyle = grad;
           ctx.beginPath();
           ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
