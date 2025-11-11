@@ -16,19 +16,29 @@
   --accent-2: #00ffd0;
 }
 
-html, body { height: 100%; }
+html {
+  height: 100%;
+  /* Mirror the body gradient on the root so iOS overscroll shows it */
+  background:
+    radial-gradient(1200px 800px at 80% 10%, var(--bg-2), transparent 60%),
+    radial-gradient(800px 600px at 10% 20%, #001c31, transparent 55%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0));
+  /* Ensure non-gradient areas are still the deep space color */
+  background-color: var(--bg-0);
+  color-scheme: dark;
+}
+body { height: 100%; }
 body {
   margin: 0;
   color: var(--text);
-  background: radial-gradient(1200px 800px at 80% 10%, var(--bg-2), transparent 60%),
-              radial-gradient(800px 600px at 10% 20%, #001c31, transparent 55%),
-              linear-gradient(180deg, var(--bg-1), var(--bg-0));
+  /* Let the html element carry the base gradient to cover overscroll */
+  background: transparent;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
   overflow-x: hidden;
 }
 
 /* Cosmic layers */
-.sky { position: fixed; inset: 0; z-index: -3; }
+.sky { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 canvas#stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; filter: drop-shadow(0 0 1px var(--star)); }
 .nebula {
   position: absolute; inset: -10vmax;
@@ -36,7 +46,7 @@ canvas#stars { position: absolute; inset: 0; width: 100%; height: 100%; display:
               radial-gradient(35vmax 35vmax at 30% 10%, rgba(0,255,208,0.18), transparent 55%),
               radial-gradient(30vmax 30vmax at 10% 70%, rgba(91,156,255,0.18), transparent 60%);
   filter: blur(40px) saturate(110%);
-  mix-blend-mode: screen; z-index: -2; pointer-events: none;
+  mix-blend-mode: screen; pointer-events: none;
 }
 .twinkle {
   position: absolute; inset: 0;
@@ -46,12 +56,12 @@ canvas#stars { position: absolute; inset: 0; width: 100%; height: 100%; display:
     radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.7), transparent 60%),
     radial-gradient(1px 1px at 60% 40%, rgba(255,255,255,0.7), transparent 60%);
   animation: twinkle 5.5s ease-in-out infinite;
-  opacity: 0.6; z-index: -1; pointer-events: none;
+  opacity: 0.6; pointer-events: none;
 }
 @keyframes twinkle { 0%,100%{opacity:.25} 50%{opacity:.7} }
 
 /* Layout */
-.wrap { min-height: 100dvh; display: grid; grid-template-rows: 1fr auto; }
+.wrap { min-height: 100dvh; display: grid; grid-template-rows: 1fr auto; position: relative; z-index: 1; }
 .container { width: min(980px, calc(100vw - 40px)); margin: 0 auto; padding: 56px 0 24px; }
 header { display: grid; justify-items: center; gap: 16px; margin: 18px 0 28px; text-align: center; }
 header .logo { width: clamp(84px, 18vw, 132px); height: auto; filter: drop-shadow(0 0 24px rgba(255,255,255,0.35)) drop-shadow(0 0 48px rgba(138,92,255,0.35)); }
@@ -100,4 +110,3 @@ footer{ padding:24px 0 36px; text-align:center; color:#94a3b8; font-size:.85rem;
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){ .twinkle{ animation:none; opacity:.4;} .card{ transition:none;} .card:hover{ transform:none;} }
-
