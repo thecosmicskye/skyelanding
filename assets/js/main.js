@@ -2,54 +2,99 @@
 document.getElementById('year').textContent = new Date().getFullYear();
 
 // HDR Starfield using img elements with HDR AVIF sprite
+const clip = document.querySelector('.stars-clip');
 const container = document.getElementById('stars');
 const starSrc = 'assets/img/star-hdr.avif';
+const starDensity = 1000; // px^2 per star
 let stars = [];
-let w, h;
+let w = 0, h = 0;
+let fieldW = 0, fieldH = 0;
+let built = false;
 
 const rand = (min, max) => Math.random() * (max - min) + min;
 
 function resize() {
-  w = container.clientWidth;
-  h = container.clientHeight;
-  build();
+  const newW = clip.clientWidth;
+  const newH = clip.clientHeight;
+  if (newW <= 0 || newH <= 0) return;
+  if (!built) {
+    w = newW;
+    h = newH;
+    build();
+    built = true;
+    return;
+  }
+  const prevW = w;
+  const prevH = h;
+  w = newW;
+  h = newH;
+  expandField(prevW, prevH);
+}
+
+function createStar(x, y) {
+  const img = document.createElement('img');
+  img.src = starSrc;
+  img.alt = '';
+  img.draggable = false;
+
+  img.style.left = x + 'px';
+  img.style.top = y + 'px';
+
+  // Random size (1-5px base width)
+  const size = Math.pow(Math.random(), 1.8) * 4 + 1;
+  img.style.width = size + 'px';
+  img.style.height = 'auto';
+
+  // Start at full brightness
+  img.style.opacity = '1';
+  img.style.transform = 'scale(1)';
+
+  container.appendChild(img);
+  stars.push({
+    el: img,
+    x,
+    y,
+    twinkling: false,
+    twinkleStart: 0,
+    twinkleSpeed: rand(2.0, 4.0)
+  });
+}
+
+function addStarsInRect(x0, y0, x1, y1) {
+  const width = x1 - x0;
+  const height = y1 - y0;
+  if (width <= 0 || height <= 0) return;
+
+  const count = Math.round((width * height) / starDensity);
+  for (let i = 0; i < count; i++) {
+    createStar(rand(x0, x1), rand(y0, y1));
+  }
 }
 
 function build() {
   // Clear existing stars
   container.innerHTML = '';
   stars = [];
+  fieldW = w;
+  fieldH = h;
+  addStarsInRect(0, 0, fieldW, fieldH);
+}
 
-  const count = Math.round((w * h) / 1000); // density (8x more stars)
-  for (let i = 0; i < count; i++) {
-    const img = document.createElement('img');
-    img.src = starSrc;
-    img.alt = '';
-    img.draggable = false;
+function expandField(prevW, prevH) {
+  const prevFieldW = fieldW;
+  const prevFieldH = fieldH;
+  const newFieldW = Math.max(prevFieldW, w);
+  const newFieldH = Math.max(prevFieldH, h);
 
-    // Random position
-    const x = rand(0, 100);
-    const y = rand(0, 100);
-    img.style.left = x + '%';
-    img.style.top = y + '%';
-
-    // Random size (1-5px base width)
-    const size = Math.pow(Math.random(), 1.8) * 4 + 1;
-    img.style.width = size + 'px';
-    img.style.height = 'auto';
-
-    // Start at full brightness
-    img.style.opacity = '1';
-    img.style.transform = 'scale(1)';
-
-    container.appendChild(img);
-    stars.push({
-      el: img,
-      twinkling: false,
-      twinkleStart: 0,
-      twinkleSpeed: rand(2.0, 4.0)
-    });
+  if (newFieldW > prevFieldW) {
+    addStarsInRect(prevFieldW, 0, newFieldW, prevFieldH);
   }
+  if (newFieldH > prevFieldH) {
+    addStarsInRect(0, prevFieldH, newFieldW, newFieldH);
+  }
+
+  fieldW = newFieldW;
+  fieldH = newFieldH;
 }
 
 let lastFrame = 0;
@@ -94,7 +139,7 @@ function draw(nowMs) {
 }
 
 const ro = new ResizeObserver(resize);
-ro.observe(container);
+ro.observe(clip);
 resize();
 requestAnimationFrame(draw);
 
@@ -136,4 +181,3 @@ requestAnimationFrame(draw);
   });
   window.addEventListener('resize', () => { if (active) updateAll(px, py); });
 })();
-
