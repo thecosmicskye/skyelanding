@@ -29,7 +29,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Skye" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
-    <link rel="stylesheet" href="assets/css/styles.css?v=1766206621" />
+    <link rel="preload" as="image" href="assets/img/star-hdr.avif" type="image/avif" fetchpriority="low" />
+    <link rel="stylesheet" href="assets/css/styles.css?v=1766272435" />
   </head>
   <body>
     <div class="sky" aria-hidden="true">
@@ -43,7 +44,7 @@
     <div class="wrap">
       <main class="container" role="main">
         <header>
-          <img src="pfp@0.5x.webp" class="logo" alt="Cosmic Skye profile photo" loading="eager" decoding="async" />
+          <img src="pfp@0.5x.webp" class="logo" alt="Cosmic Skye profile photo" loading="eager" decoding="async" fetchpriority="high" />
           <h1>Cosmic Skye<span class="sr-only"> — Sora Creator</span></h1>
           <p class="tagline">That Sora girl<br/><span class="subline">All content made by me</span></p>
         </header>
