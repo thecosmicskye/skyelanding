@@ -123,6 +123,7 @@ h1 { margin: 0; font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem); letter-spacing: 
 /* Brand accents */
 .orb-wrap.sora{ --accent-1:#044497; --accent-2:#7ec8e3; }
 .orb-wrap.ig{ --accent-1:#E1306C; --accent-2:#833AB4; }
+.orb-wrap.of{ --accent-1:#00aff0; --accent-2:#9ae3ff; }
 .orb-wrap.fb{ --accent-1:#1877F2; --accent-2:#8ab4ff; }
 .orb-wrap.tt{ --accent-1:#25F4EE; --accent-2:#FE2C55; }
 .orb-wrap.yt{ --accent-1:#ff0033; --accent-2:#ff9999; }
