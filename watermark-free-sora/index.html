@@ -3,28 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Watermark-Free Sora Helper</title>
-    <meta
-      name="description"
-      content="Install the Watermark-Free Sora helper, sign in once in the Android emulator, and import the captured session into the Chrome extension."
-    />
+    <title>Watermark-Free Sora</title>
+    <meta name="description" content="Watermark-Free Sora — install the Chrome extension and grab a license in Discord." />
     <link rel="canonical" href="https://www.skye.page/watermark-free-sora/" />
     <style>
       :root {
         --bg: #f5efe5;
         --ink: #142017;
         --muted: #627264;
-        --panel: rgba(255, 251, 244, 0.92);
         --panel-strong: #fff9f0;
         --border: rgba(20, 32, 23, 0.12);
-        --accent: #0f7f5f;
-        --accent-2: #d99818;
         --shadow: 0 24px 60px rgba(20, 32, 23, 0.12);
       }
 
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
+
+      html, body { height: 100%; }
 
       body {
         margin: 0;
@@ -34,198 +28,65 @@
           radial-gradient(circle at top left, rgba(15, 127, 95, 0.16), transparent 30%),
           radial-gradient(circle at bottom right, rgba(217, 152, 24, 0.15), transparent 36%),
           linear-gradient(180deg, #f7f2e8 0%, #efe6d7 100%);
+        display: grid;
+        place-items: center;
+        padding: 32px 16px;
       }
 
       main {
-        width: min(1040px, calc(100vw - 32px));
-        margin: 0 auto;
-        padding: 40px 0 72px;
-      }
-
-      .hero,
-      .panel {
-        border: 1px solid var(--border);
-        border-radius: 28px;
-        background: var(--panel);
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(10px);
-      }
-
-      .hero {
-        padding: 28px;
-        background:
-          linear-gradient(135deg, rgba(15, 127, 95, 0.12), rgba(217, 152, 24, 0.16)),
-          var(--panel-strong);
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: rgba(20, 32, 23, 0.07);
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        width: min(560px, 100%);
+        text-align: center;
       }
 
       h1 {
-        margin: 16px 0 10px;
-        font-size: clamp(34px, 6vw, 60px);
-        line-height: 0.96;
-      }
-
-      .hero p {
-        max-width: 62ch;
-        margin: 0;
-        color: var(--muted);
-      }
-
-      .grid {
-        display: grid;
-        gap: 18px;
-        margin-top: 22px;
-      }
-
-      @media (min-width: 860px) {
-        .grid {
-          grid-template-columns: 1.2fr 0.8fr;
-        }
-      }
-
-      .panel {
-        padding: 22px;
-      }
-
-      .panel h2 {
-        margin: 0 0 8px;
-        font-size: 20px;
-      }
-
-      .panel p,
-      .panel li {
-        color: var(--muted);
+        margin: 0 0 28px;
+        font-size: clamp(40px, 8vw, 64px);
+        line-height: 1;
       }
 
       .cta-row {
         display: grid;
         gap: 12px;
-        margin-top: 18px;
-      }
-
-      @media (min-width: 640px) {
-        .cta-row {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
       }
 
       a.button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 56px;
-        padding: 14px 18px;
+        min-height: 60px;
+        padding: 16px 20px;
         border-radius: 18px;
         text-decoration: none;
         font-weight: 700;
-        transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+        font-size: 17px;
+        border: 1px solid var(--border);
+        background: var(--panel-strong);
+        box-shadow: var(--shadow);
+        transition: transform 120ms ease, box-shadow 120ms ease;
       }
 
       a.button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 12px 28px rgba(20, 32, 23, 0.14);
+        box-shadow: 0 12px 28px rgba(20, 32, 23, 0.18);
       }
 
       .primary {
         color: #f8fff8;
         background: linear-gradient(135deg, #0f7f5f, #155342);
+        border-color: transparent;
       }
 
       .secondary {
         color: var(--ink);
-        background: rgba(20, 32, 23, 0.08);
-      }
-
-      .steps {
-        display: grid;
-        gap: 14px;
-        margin-top: 18px;
-      }
-
-      .step {
-        padding: 16px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.68);
-        border: 1px solid rgba(20, 32, 23, 0.08);
-      }
-
-      .step strong {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 15px;
-      }
-
-      code {
-        font-family: ui-monospace, "SFMono-Regular", monospace;
-        font-size: 0.95em;
-      }
-
-      .fine {
-        margin-top: 14px;
-        font-size: 13px;
-        color: var(--muted);
       }
     </style>
   </head>
   <body>
     <main>
-      <section class="hero">
-        <div class="eyebrow">Watermark-Free Sora</div>
-        <h1>Install the helper once. Capture the Android session once. Keep the web player easy.</h1>
-        <p>
-          The Chrome extension uses a real Android Sora session. The helper app sets up the emulator flow,
-          launches sign-in, captures the token, and hands it back to the extension.
-        </p>
-      </section>
-
-      <div class="grid">
-        <section class="panel">
-          <h2>Download the helper</h2>
-          <p>
-            Pick your platform and run the helper. It downloads the preserved runtime patch pack and the Android base
-            pieces automatically, then you come back to the extension and use <code>Import Captured Token</code>.
-          </p>
-          <div class="cta-row">
-            <a class="button primary" href="/downloads/Watermark-Free-Sora-Setup.exe" download>Download for Windows</a>
-            <a class="button secondary" href="/downloads/Watermark-Free-Sora-Installer.dmg" download>Download for macOS</a>
-          </div>
-          <p class="fine">
-            The Chrome extension itself stays separate. If you already have a valid Android token, you can paste it
-            directly into the extension instead of running the helper.
-          </p>
-          <p class="fine">
-            Need a helper license first? Grab it in <a href="/discord/">Discord</a>, then paste it into the helper when it asks.
-          </p>
-        </section>
-
-        <section class="panel">
-          <h2>What happens</h2>
-          <div class="steps">
-            <div class="step">
-              <strong>1. Install the helper</strong>
-              It registers the local native bridge, downloads the preserved patch pack, and prepares the Android runtime.
-            </div>
-            <div class="step">
-              <strong>2. Sign in once</strong>
-              Finish login in the Android emulator, including Google auth and any second factor.
-            </div>
-            <div class="step">
-              <strong>3. Import the token</strong>
-              The extension reads the captured session from <code>~/.config/sora-spoof/token.json</code>.
-            </div>
-          </div>
-        </section>
+      <h1>Watermark-Free Sora</h1>
+      <div class="cta-row">
+        <a class="button primary" href="https://chromewebstore.google.com/" target="_blank" rel="noopener">Install Chrome Extension</a>
+        <a class="button secondary" href="https://discord.gg/qTVNjEgsQX" target="_blank" rel="noopener">Get a License in Discord</a>
       </div>
     </main>
   </body>
