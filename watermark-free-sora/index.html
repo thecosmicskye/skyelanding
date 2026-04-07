@@ -79,15 +79,35 @@
       .secondary {
         color: var(--ink);
       }
+
+      .step {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        margin-right: 12px;
+        border-radius: 999px;
+        background: rgba(20, 32, 23, 0.14);
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 800;
+        flex-shrink: 0;
+      }
+
+      .primary .step {
+        background: rgba(255, 255, 255, 0.22);
+        color: #f8fff8;
+      }
     </style>
   </head>
   <body>
     <main>
       <h1>Watermark-Free Sora</h1>
       <div class="cta-row">
-        <a class="button primary" href="https://chromewebstore.google.com/" target="_blank" rel="noopener">Install Chrome Extension</a>
-        <a class="button secondary" href="/downloads/Watermark-Free-Sora-Installer.dmg" download>Download Helper (macOS)</a>
-        <a class="button secondary" href="https://discord.gg/qTVNjEgsQX" target="_blank" rel="noopener">Get a License in Discord</a>
+        <a class="button primary" href="https://discord.gg/qTVNjEgsQX" target="_blank" rel="noopener"><span class="step">1</span>Get a License in Discord</a>
+        <a class="button secondary" href="/downloads/Watermark-Free-Sora-Installer.dmg" download><span class="step">2</span>Download Installer (macOS)</a>
+        <a class="button secondary" href="https://chromewebstore.google.com/" target="_blank" rel="noopener"><span class="step">3</span>Download Chrome Extension</a>
       </div>
     </main>
   </body>
