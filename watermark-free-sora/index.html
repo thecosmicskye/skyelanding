@@ -18,9 +18,12 @@
 
       * { box-sizing: border-box; }
 
-      html, body { height: 100%; }
+      html {
+        min-height: 100%;
+      }
 
       body {
+        min-height: 100%;
         margin: 0;
         font: 16px/1.5 "Avenir Next", "Segoe UI", ui-sans-serif, sans-serif;
         color: var(--ink);
@@ -28,13 +31,12 @@
           radial-gradient(circle at top left, rgba(15, 127, 95, 0.16), transparent 30%),
           radial-gradient(circle at bottom right, rgba(217, 152, 24, 0.15), transparent 36%),
           linear-gradient(180deg, #f7f2e8 0%, #efe6d7 100%);
-        display: grid;
-        place-items: center;
         padding: 32px 16px;
       }
 
       main {
         width: min(1040px, 100%);
+        margin: 0 auto;
       }
 
       h1 {
