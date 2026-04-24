@@ -224,6 +224,23 @@ footer .footer-link:hover{ color:var(--text); border-bottom-color: rgba(230,236,
 .press-link-list{ margin: 0 0 1em; padding-left: 1.2em; }
 .press-link-list li{ margin: .3em 0; }
 
+/* Press release detail page */
+.press-container{ padding-top: 40px; }
+.press-back{ max-width: 720px; margin: 0 auto 16px; }
+.press-back-link{ display: inline-block; color: var(--muted); text-decoration: none; font-size: .95rem; padding: 6px 10px; margin-left: -10px; border-radius: 8px; transition: color 160ms ease, background 160ms ease; }
+.press-back-link:hover{ color: var(--text); background: rgba(255,255,255,0.04); }
+.press-release--solo .press-title{ font-size: clamp(1.5rem, 1.4vw + 1.1rem, 2rem); }
+
+/* Press index cards */
+.press-card{ display: block; padding: 24px 22px; border:1px solid rgba(255,255,255,0.12); border-radius: var(--radius); background: var(--card); backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); text-decoration: none; color: inherit; box-shadow: 0 6px 40px rgba(0,0,0,0.25); transition: transform 160ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+.press-card:hover{ transform: translateY(-2px); border-color: rgba(138,92,255,0.35); box-shadow: 0 12px 48px rgba(0,0,0,0.35), 0 0 24px rgba(138,92,255,0.25); }
+@media (min-width: 620px){ .press-card{ padding: 30px 32px; } }
+.press-card .press-date{ margin-bottom: 10px; }
+.press-card-title{ margin: 0 0 12px; font-size: clamp(1.2rem, 1vw + 1rem, 1.55rem); line-height: 1.25; color: var(--text); text-shadow: 0 0 20px rgba(138,92,255,0.2); }
+.press-card-lede{ margin: 0 0 14px; color: #cfd8ff; font-size: .98rem; line-height: 1.5; font-weight: 500; }
+.press-card-more{ display: inline-block; color: #cfe8ff; font-size: .92rem; border-bottom: 1px solid rgba(138,92,255,0.45); padding-bottom: 1px; transition: color 160ms ease, border-color 160ms ease; }
+.press-card:hover .press-card-more{ color: var(--text); border-bottom-color: var(--accent-2); }
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .twinkle{ animation:none; opacity:.4;}
